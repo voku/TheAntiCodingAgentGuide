@@ -61,13 +61,28 @@ const App: React.FC = () => {
     if (!navElement) return;
 
     const handleScroll = () => {
+      // Only shrink header on mobile/tablet (< 768px)
+      if (window.innerWidth >= 768) return;
+      
       // On mobile: horizontal scroll (scrollLeft), on desktop: vertical scroll (scrollTop)
       const scrollAmount = navElement.scrollLeft + navElement.scrollTop;
       setIsScrolled(scrollAmount > 20);
     };
 
+    // Reset scroll state on window resize
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsScrolled(false);
+      }
+    };
+
     navElement.addEventListener('scroll', handleScroll);
-    return () => navElement.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      navElement.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const handleUnlock = (recipeId: string) => {
