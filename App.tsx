@@ -66,12 +66,8 @@ const App: React.FC = () => {
       // Only shrink header on mobile/tablet (< MOBILE_BREAKPOINT)
       if (window.innerWidth >= MOBILE_BREAKPOINT) return;
       
-      // Check scroll in the appropriate direction based on layout
-      // Mobile uses horizontal scroll (flex row), desktop uses vertical scroll (flex col)
-      const scrollAmount = window.innerWidth < MOBILE_BREAKPOINT 
-        ? navElement.scrollLeft 
-        : navElement.scrollTop;
-      
+      // Mobile uses horizontal scroll (flex row with overflow-x-auto)
+      const scrollAmount = navElement.scrollLeft;
       setIsScrolled(scrollAmount > 20);
     };
 
