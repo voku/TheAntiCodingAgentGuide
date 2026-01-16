@@ -43,6 +43,8 @@ const GlitchText: React.FC<{ text: string }> = ({ text }) => {
 
 // --- Main App Component ---
 
+const MOBILE_BREAKPOINT = 768; // px - matches Tailwind's 'md:' breakpoint
+
 const App: React.FC = () => {
   const [stats, setStats] = useState<UserStats>({
     securityScore: 10,
@@ -61,17 +63,21 @@ const App: React.FC = () => {
     if (!navElement) return;
 
     const handleScroll = () => {
-      // Only shrink header on mobile/tablet (< 768px)
-      if (window.innerWidth >= 768) return;
+      // Only shrink header on mobile/tablet (< MOBILE_BREAKPOINT)
+      if (window.innerWidth >= MOBILE_BREAKPOINT) return;
       
-      // On mobile: horizontal scroll (scrollLeft), on desktop: vertical scroll (scrollTop)
-      const scrollAmount = navElement.scrollLeft + navElement.scrollTop;
+      // Check scroll in the appropriate direction based on layout
+      // Mobile uses horizontal scroll (flex row), desktop uses vertical scroll (flex col)
+      const scrollAmount = window.innerWidth < MOBILE_BREAKPOINT 
+        ? navElement.scrollLeft 
+        : navElement.scrollTop;
+      
       setIsScrolled(scrollAmount > 20);
     };
 
     // Reset scroll state on window resize
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= MOBILE_BREAKPOINT) {
         setIsScrolled(false);
       }
     };
@@ -157,7 +163,7 @@ const App: React.FC = () => {
                       setActiveRecipe(recipe);
                       mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
                       // Shrink header on mobile when navigating between missions
-                      if (window.innerWidth < 768) {
+                      if (window.innerWidth < MOBILE_BREAKPOINT) {
                         setIsScrolled(true);
                       }
                     }}
