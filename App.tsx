@@ -161,11 +161,12 @@ const App: React.FC = () => {
           </div>
           
           <a 
-            href="#" 
-            onClick={(e) => { e.preventDefault(); alert("Mirroring tribal state to GitHub Pages... LARS KNOWS WHY."); }}
+            href="https://github.com/voku/TheAntiCodingAgentGuide" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="block w-full text-center p-3 border-4 border-zinc-900 bg-zinc-100 hover:bg-black hover:text-white transition-all text-[10px] md:text-xs font-black uppercase tracking-widest shadow-[4px_4px_0px_#000]"
           >
-            Switch to GitHub Pages Mirror
+            Contribute on GitHub
           </a>
         </footer>
       </aside>
@@ -349,9 +350,9 @@ const App: React.FC = () => {
                  </div>
 
                  <div className="p-8 md:p-16 bg-zinc-900 text-zinc-100 font-mono text-left text-[10px] md:text-xl space-y-4 md:space-y-8 border-l-[12px] md:border-l-[24px] border-red-600 shadow-inner">
-                    <p className="text-red-500 animate-pulse font-black">>> REASONING_ENGINE: DISABLED</p>
-                    <p className="opacity-60 text-[9px] md:text-lg">>> PROMPT: "Explain Lars' implementation logic from 2021."</p>
-                    <p className="text-emerald-400 font-black">>> RESPONSE: "Access Denied. Reasoning requires tribal context not found in repository. Consult oral history."</p>
+                    <p className="text-red-500 animate-pulse font-black">&gt;&gt; REASONING_ENGINE: DISABLED</p>
+                    <p className="opacity-60 text-[9px] md:text-lg">&gt;&gt; PROMPT: "Explain Lars' implementation logic from 2021."</p>
+                    <p className="text-emerald-400 font-black">&gt;&gt; RESPONSE: "Access Denied. Reasoning requires tribal context not found in repository. Consult oral history."</p>
                  </div>
                </div>
             </div>
