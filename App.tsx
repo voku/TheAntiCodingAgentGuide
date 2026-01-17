@@ -155,10 +155,6 @@ const App: React.FC = () => {
                     onClick={() => {
                       setActiveRecipe(recipe);
                       mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-                      // Shrink header on mobile when navigating between missions
-                      if (window.innerWidth < MOBILE_BREAKPOINT) {
-                        setIsScrolled(true);
-                      }
                     }}
                     className={`flex-shrink-0 w-24 md:w-full text-left p-1.5 md:p-6 border-2 md:border-4 transition-all relative group overflow-hidden snap-center ${
                       isActive 
@@ -173,7 +169,7 @@ const App: React.FC = () => {
                         {recipe.level}
                       </div>
                       <div className="flex-1 min-w-0 text-center md:text-left">
-                        <p className="text-[7px] md:text-[13px] font-black uppercase tracking-tighter leading-none truncate">
+                        <p className="text-[8px] md:text-[13px] font-black uppercase tracking-tighter leading-none truncate">
                           {recipe.title}
                         </p>
                         {isDone && !isActive && <div className="hidden md:block text-[8px] font-black text-emerald-500 uppercase tracking-widest mt-1">✓ Fortified</div>}
