@@ -43,6 +43,8 @@ const GlitchText: React.FC<{ text: string }> = ({ text }) => {
 
 // --- Main App Component ---
 
+const MOBILE_BREAKPOINT = 768; // px - matches Tailwind's 'md:' breakpoint
+
 const App: React.FC = () => {
   const [stats, setStats] = useState<UserStats>({
     securityScore: 10,
@@ -51,7 +53,39 @@ const App: React.FC = () => {
   });
   const [activeRecipe, setActiveRecipe] = useState<Recipe>(QUEST_RECIPES[0]);
   const [shake, setShake] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  // Scroll detection for header shrinking on mobile/tablet
+  useEffect(() => {
+    const navElement = navRef.current;
+    if (!navElement) return;
+
+    const handleScroll = () => {
+      // Only shrink header on mobile/tablet (< MOBILE_BREAKPOINT)
+      if (window.innerWidth >= MOBILE_BREAKPOINT) return;
+      
+      // Mobile uses horizontal scroll (flex row with overflow-x-auto)
+      const scrollAmount = navElement.scrollLeft;
+      setIsScrolled(scrollAmount > 20);
+    };
+
+    // Reset scroll state on window resize
+    const handleResize = () => {
+      if (window.innerWidth >= MOBILE_BREAKPOINT) {
+        setIsScrolled(false);
+      }
+    };
+
+    navElement.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      navElement.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleUnlock = (recipeId: string) => {
     const recipe = QUEST_RECIPES.find(r => r.id === recipeId);
@@ -78,27 +112,27 @@ const App: React.FC = () => {
       {/* SIDEBAR: Command Center */}
       <aside className="flex-none w-full md:w-80 lg:w-[420px] border-b-4 md:border-b-0 md:border-r-8 border-zinc-900 p-3 md:p-10 flex flex-col z-50 bg-white shadow-[0px_4px_15px_rgba(0,0,0,0.15)] md:shadow-[15px_0px_0px_rgba(0,0,0,0.05)] overflow-hidden">
         
-        <header className="mb-4 md:mb-12 flex items-center justify-between md:block">
+        <header className={`mb-4 md:mb-12 flex items-center justify-between md:block transition-all duration-300 ${isScrolled ? 'mb-2' : ''}`}>
           <div className="transform -rotate-[4.5deg] hover:rotate-0 transition-transform inline-block">
-            <h1 className="text-2xl md:text-8xl font-black tracking-tighter leading-none uppercase">
-              <span className="bg-zinc-900 text-white px-1 md:px-3 border-2 md:border-8 border-zinc-900 shadow-[4px_4px_0px_#ef4444] md:shadow-[12px_12px_0px_#ef4444]">THE</span>
+            <h1 className={`font-black tracking-tighter leading-none uppercase transition-all duration-300 ${isScrolled ? 'text-xl' : 'text-2xl'} md:text-8xl`}>
+              <span className={`bg-zinc-900 text-white border-2 md:border-8 border-zinc-900 transition-all duration-300 ${isScrolled ? 'px-0.5 shadow-[2px_2px_0px_#ef4444]' : 'px-1 shadow-[4px_4px_0px_#ef4444]'} md:px-3 md:shadow-[12px_12px_0px_#ef4444]`}>THE</span>
               <br className="hidden md:block" />
-              <span className="text-red-600 underline decoration-4 md:decoration-[12px] decoration-zinc-900 ml-2 md:ml-0">MOAT</span>
+              <span className={`text-red-600 underline decoration-zinc-900 transition-all duration-300 ${isScrolled ? 'decoration-2 ml-1' : 'decoration-4 ml-2'} md:decoration-[12px] md:ml-0`}>MOAT</span>
             </h1>
           </div>
           <div className="hidden md:flex mt-6 items-center gap-2">
             <span className="flex h-3 w-3 rounded-full bg-red-500 animate-ping" />
             <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-zinc-400">Live Production Access</span>
           </div>
-          <div className="md:hidden flex h-3 w-3 rounded-full bg-red-500 animate-pulse border-2 border-zinc-900" title="Live Access" />
+          <div className={`md:hidden flex rounded-full bg-red-500 animate-pulse border-2 border-zinc-900 transition-all duration-300 ${isScrolled ? 'h-2 w-2' : 'h-3 w-3'}`} title="Live Access" />
         </header>
 
         <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
           {/* STATS SECTION */}
-          <section className="bg-zinc-50 p-3 md:p-8 border-2 md:border-4 border-zinc-900 shadow-[3px_3px_0px_#000] md:shadow-[8px_8px_0px_#000] mb-3 md:mb-10 rotate-[1.5deg]">
+          <section className={`bg-zinc-50 border-2 md:border-4 border-zinc-900 rotate-[1.5deg] transition-all duration-300 ${isScrolled ? 'p-2 mb-2 shadow-[2px_2px_0px_#000]' : 'p-3 mb-3 shadow-[3px_3px_0px_#000]'} md:p-8 md:mb-10 md:shadow-[8px_8px_0px_#000]`}>
             <ProgressBar label="Job Security" value={stats.securityScore} color="bg-emerald-400" trackColor="bg-zinc-200" />
             <ProgressBar label="System Chaos" value={stats.chaosMeter} color="bg-amber-400" trackColor="bg-zinc-200" />
-            <div className="flex justify-between font-mono text-[8px] md:text-[10px] text-zinc-400 mt-1 md:mt-2">
+            <div className={`flex justify-between font-mono text-zinc-400 transition-all duration-300 ${isScrolled ? 'text-[7px] mt-0.5' : 'text-[8px] mt-1'} md:text-[10px] md:mt-2`}>
               <span className="animate-pulse">REF: 2026_VIBES_SYNC</span>
               <span className="hidden md:inline">NODE_66_ACTIVE</span>
             </div>
@@ -113,7 +147,7 @@ const App: React.FC = () => {
               <span className="text-[8px] font-mono text-zinc-300">LARS_LOG_001</span>
             </div>
             
-            <div className="flex md:flex-col overflow-x-auto md:overflow-y-auto md:overflow-x-hidden gap-2 md:gap-4 scrollbar-hide md:scrollbar-custom pb-3 md:pb-6 snap-x">
+            <div ref={navRef} className="flex md:flex-col overflow-x-auto md:overflow-y-auto md:overflow-x-hidden gap-2 md:gap-4 scrollbar-hide md:scrollbar-custom pb-3 md:pb-6 snap-x">
               {QUEST_RECIPES.map((recipe) => {
                 const isActive = activeRecipe.id === recipe.id;
                 const isDone = stats.unlockedLevels.includes(recipe.id);
@@ -124,6 +158,10 @@ const App: React.FC = () => {
                     onClick={() => {
                       setActiveRecipe(recipe);
                       mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+                      // Shrink header on mobile when navigating between missions
+                      if (window.innerWidth < MOBILE_BREAKPOINT) {
+                        setIsScrolled(true);
+                      }
                     }}
                     className={`flex-shrink-0 w-32 md:w-full text-left p-3 md:p-6 border-2 md:border-4 transition-all relative group overflow-hidden snap-center ${
                       isActive 
