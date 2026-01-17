@@ -59,15 +59,12 @@ const App: React.FC = () => {
 
   // Scroll detection for header shrinking on mobile/tablet
   useEffect(() => {
-    const navElement = navRef.current;
-    if (!navElement) return;
-
     const handleScroll = () => {
       // Only shrink header on mobile/tablet (< MOBILE_BREAKPOINT)
       if (window.innerWidth >= MOBILE_BREAKPOINT) return;
       
-      // Mobile uses horizontal scroll (flex row with overflow-x-auto)
-      const scrollAmount = navElement.scrollLeft;
+      // On mobile, the page itself scrolls (window scroll) not internal containers
+      const scrollAmount = window.scrollY || document.documentElement.scrollTop;
       setIsScrolled(scrollAmount > 20);
     };
 
@@ -78,11 +75,11 @@ const App: React.FC = () => {
       }
     };
 
-    navElement.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
     
     return () => {
-      navElement.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
