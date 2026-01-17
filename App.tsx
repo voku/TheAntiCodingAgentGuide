@@ -12,7 +12,7 @@ const CrookedHeading: React.FC<{ text: string; className?: string; tilt?: string
 
 const ProgressBar: React.FC<{ value: number; label: string; color: string; trackColor: string }> = ({ value, label, color, trackColor }) => (
   <div className="mb-1.5 md:mb-6 group">
-    <div className="flex justify-between text-[9px] md:text-xs mb-0.5 md:mb-2 uppercase tracking-widest font-black text-zinc-500 group-hover:text-red-600 transition-colors">
+    <div className="flex justify-between text-[10px] md:text-xs mb-0.5 md:mb-2 uppercase tracking-widest font-black text-zinc-500 group-hover:text-red-600 transition-colors">
       <span>{label}</span>
       <span className="tabular-nums">{Math.floor(value)}%</span>
     </div>
@@ -186,7 +186,7 @@ const App: React.FC = () => {
           </nav>
         </div>
 
-        <footer className="hidden md:flex mt-4 md:mt-10 pt-4 md:pt-8 border-t-8 border-zinc-100 flex-col gap-4">
+        <footer className="hidden md:flex md:flex-col mt-4 md:mt-10 pt-4 md:pt-8 border-t-8 border-zinc-100 gap-4">
           <div className="flex justify-between items-center grayscale opacity-40">
             <div className="text-[10px] font-mono leading-tight">
               [ALARM] {500 + Math.floor(Math.random() * 500)} WARNINGS<br />
