@@ -24,6 +24,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
+      - name: Type check
+        run: ./node_modules/.bin/tsc --noEmit
       - name: Build
         run: npm run build
       - name: Verify build output
